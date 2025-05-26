@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'screens/home_screen.dart';
-import 'package:vercel_speed_insights/vercel_speed_insights.dart';
 
 void main() {
   runApp(const MyApp());
