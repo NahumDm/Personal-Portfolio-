@@ -115,7 +115,9 @@ class _ContactSectionState extends State<ContactSection> {
               icon: FontAwesomeIcons.linkedin,
               color: const Color(0xFF0077B5),
               onTap:
-                  () => _launchUrl('https://www.linkedin.com/in/nahom-desta/'),
+                  () => _launchUrl(
+                    'https://www.linkedin.com/in/nahom-desta-mengesha',
+                  ),
             ),
             const SizedBox(width: 32),
             _SocialButton(
