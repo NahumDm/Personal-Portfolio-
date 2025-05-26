@@ -158,41 +158,95 @@ class _ProjectCard extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (project.liveUrl != null)
-                      _ActionButton(
-                        label: 'View Live',
-                        icon: Icons.launch,
-                        onTap: () => _launchUrl(project.liveUrl!),
-                      ),
-                    if (project.liveUrl != null &&
-                        project.sourceCodeUrl != null)
-                      const SizedBox(height: 16),
-                    if (project.sourceCodeUrl != null)
-                      _ActionButton(
-                        label: 'Source Code',
-                        icon: Icons.code,
-                        onTap: () => _launchUrl(project.sourceCodeUrl!),
-                      ),
+                    if (project.title == 'SSGI-Fix')
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.lock, size: 16, color: Colors.grey),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'NDA Protected',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    else ...[
+                      if (project.liveUrl != null)
+                        _ActionButton(
+                          label: 'View Live',
+                          icon: Icons.launch,
+                          onTap: () => _launchUrl(project.liveUrl!),
+                        ),
+                      if (project.liveUrl != null &&
+                          project.sourceCodeUrl != null)
+                        const SizedBox(height: 16),
+                      if (project.sourceCodeUrl != null)
+                        _ActionButton(
+                          label: 'Source Code',
+                          icon: Icons.code,
+                          onTap: () => _launchUrl(project.sourceCodeUrl!),
+                        ),
+                    ],
                   ],
                 );
               } else {
                 return Row(
                   children: [
-                    if (project.liveUrl != null)
-                      _ActionButton(
-                        label: 'View Live',
-                        icon: Icons.launch,
-                        onTap: () => _launchUrl(project.liveUrl!),
-                      ),
-                    if (project.liveUrl != null &&
-                        project.sourceCodeUrl != null)
-                      const SizedBox(width: 16),
-                    if (project.sourceCodeUrl != null)
-                      _ActionButton(
-                        label: 'Source Code',
-                        icon: Icons.code,
-                        onTap: () => _launchUrl(project.sourceCodeUrl!),
-                      ),
+                    if (project.title == 'SSGI-Fix')
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.lock, size: 16, color: Colors.grey),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'NDA Protected',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    else ...[
+                      if (project.liveUrl != null)
+                        _ActionButton(
+                          label: 'View Live',
+                          icon: Icons.launch,
+                          onTap: () => _launchUrl(project.liveUrl!),
+                        ),
+                      if (project.liveUrl != null &&
+                          project.sourceCodeUrl != null)
+                        const SizedBox(width: 16),
+                      if (project.sourceCodeUrl != null)
+                        _ActionButton(
+                          label: 'Source Code',
+                          icon: Icons.code,
+                          onTap: () => _launchUrl(project.sourceCodeUrl!),
+                        ),
+                    ],
                   ],
                 );
               }
