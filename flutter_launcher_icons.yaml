@@ -1,0 +1,10 @@
+flutter_launcher_icons:
+  web:
+    generate: true
+    image_path: "assets/image/nahomdesta.png"
+    background_color: "#FFFFFF"
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/image/nahomdesta.png"
+  remove_alpha_ios: true
+  min_sdk_android: 21
