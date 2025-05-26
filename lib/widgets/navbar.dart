@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Navbar extends StatelessWidget {
   final Function(int) onSectionSelected;
 
   const Navbar({super.key, required this.onSectionSelected});
+
+  Future<void> _downloadResume() async {
+    // Using view mode instead of edit mode for better download options
+    const resumeUrl =
+        'https://drive.google.com/file/d/1VwJsbl5rShc5f_EB2fMGgmdNuumqsKuz/view?usp=sharing';
+    final uri = Uri.parse(resumeUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +58,7 @@ class Navbar extends StatelessWidget {
         _NavItem(title: 'Education', onTap: () => onSectionSelected(1)),
         _NavItem(title: 'Contact', onTap: () => onSectionSelected(2)),
         _NavItem(title: 'Blog', onTap: () => onSectionSelected(3)),
-        _NavItem(title: 'Resume', onTap: () => onSectionSelected(4)),
+        _NavItem(title: 'Resume', onTap: _downloadResume),
       ],
     );
   }
@@ -61,9 +72,21 @@ class Navbar extends StatelessWidget {
             const PopupMenuItem(value: 1, child: Text('Education')),
             const PopupMenuItem(value: 2, child: Text('Contact')),
             const PopupMenuItem(value: 3, child: Text('Blog')),
-            const PopupMenuItem(value: 4, child: Text('Resume')),
+            PopupMenuItem(
+              value: 4,
+              child: const Text('Resume'),
+              onTap: () {
+                // Use Future.delayed to ensure the popup menu is closed before launching the URL
+                Future.delayed(Duration.zero, _downloadResume);
+              },
+            ),
           ],
-      onSelected: onSectionSelected,
+      onSelected: (index) {
+        if (index != 4) {
+          // Only call onSectionSelected for non-resume items
+          onSectionSelected(index);
+        }
+      },
     );
   }
 }
