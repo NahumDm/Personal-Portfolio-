@@ -33,6 +33,15 @@ migrate_working_dir/
 .pub/
 /build/
 
+.env
+google-service.json
+*.jks
+config.js
+credentials.txt
+*.pem
+build/
+
+
 # Symbolication related
 app.*.symbols
 
