@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'navbar.dart';
 
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+      color: isDarkMode ? Colors.black : Colors.white,
       child: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 0.7,
@@ -22,7 +28,7 @@ class HeroSection extends StatelessWidget {
                     if (isSmallScreen) ...[
                       _buildProfileImage(),
                       const SizedBox(height: 24),
-                      _buildTextContent(),
+                      _buildTextContent(isDarkMode),
                     ] else ...[
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +45,7 @@ class HeroSection extends StatelessWidget {
                             flex: 2,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 16),
-                              child: _buildTextContent(),
+                              child: _buildTextContent(isDarkMode),
                             ),
                           ),
                         ],
@@ -79,16 +85,17 @@ class HeroSection extends StatelessWidget {
     );
   }
 
-  Widget _buildTextContent() {
+  Widget _buildTextContent(bool isDarkMode) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Hello, I'm Nahom Desta",
           style: TextStyle(
             fontSize: 32,
             fontWeight: FontWeight.w500,
             fontFamily: 'Poppins',
+            color: isDarkMode ? Colors.white : Colors.black,
           ),
         ),
         const SizedBox(height: 16),
@@ -98,7 +105,7 @@ class HeroSection extends StatelessWidget {
               fontFamily: 'Open Sans',
               fontWeight: FontWeight.w300,
               fontSize: 16,
-              color: Colors.grey.shade700,
+              color: isDarkMode ? Colors.grey.shade300 : Colors.grey.shade700,
               height: 1.5,
             ),
             children: [
@@ -113,7 +120,7 @@ I've built efficient, user-friendly apps, and I'm constantly expanding my expert
                 text: 'My mission is clear',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: isDarkMode ? Colors.white : Colors.black87,
                 ),
               ),
               const TextSpan(
@@ -127,7 +134,7 @@ I've built efficient, user-friendly apps, and I'm constantly expanding my expert
                     "Let's build a future where tech meets real-world impact.",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: isDarkMode ? Colors.white : Colors.black87,
                 ),
               ),
             ],

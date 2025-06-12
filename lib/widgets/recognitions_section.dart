@@ -1,28 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'navbar.dart';
 
 class RecognitionsSection extends StatelessWidget {
   const RecognitionsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      color: isDarkMode ? Colors.black : Colors.white,
       child: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 0.7,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Recognitions',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Poppins',
+                  color: isDarkMode ? Colors.white : Colors.black,
                 ),
               ),
               const SizedBox(height: 20),
-              _buildCertificatesList(),
+              _buildCertificatesList(isDarkMode),
             ],
           ),
         ),
@@ -30,7 +37,7 @@ class RecognitionsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildCertificatesList() {
+  Widget _buildCertificatesList(bool isDarkMode) {
     // Local images
     final certificates = [
       {
@@ -40,6 +47,10 @@ class RecognitionsSection extends StatelessWidget {
       {
         'image': 'assets/image/certificates/alx.png',
         'title': 'ALX - Certificate of AI-Career Essentials',
+      },
+      {
+        'image': 'assets/image/certificates/PF.png',
+        'title': 'ALX - Certificate of Professional Foundation',
       },
 
       // Add more certificates as needed
@@ -63,7 +74,7 @@ class RecognitionsSection extends StatelessWidget {
                 width: itemWidth,
                 margin: const EdgeInsets.only(right: 24),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: isDarkMode ? Colors.grey.shade900 : Colors.white,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -86,24 +97,35 @@ class RecognitionsSection extends StatelessWidget {
                         height: 320,
                         fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) {
-                      
+                          print(
+                            'Error loading image: ${error.toString()}',
+                          ); // Add debug print
                           return Container(
                             height: 320,
-                            color: Colors.grey[200],
+                            color:
+                                isDarkMode
+                                    ? Colors.grey.shade800
+                                    : Colors.grey[200],
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.error_outline,
-                                  color: Colors.red,
+                                  color:
+                                      isDarkMode
+                                          ? Colors.red.shade300
+                                          : Colors.red,
                                   size: 40,
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
                                   'Error loading image\n${error.toString()}',
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    color: Colors.red,
+                                  style: TextStyle(
+                                    color:
+                                        isDarkMode
+                                            ? Colors.red.shade300
+                                            : Colors.red,
                                     fontSize: 12,
                                   ),
                                 ),
@@ -117,9 +139,10 @@ class RecognitionsSection extends StatelessWidget {
                       padding: const EdgeInsets.all(8),
                       child: Text(
                         certificates[index]['title']!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
+                          color: isDarkMode ? Colors.white : Colors.black,
                         ),
                       ),
                     ),

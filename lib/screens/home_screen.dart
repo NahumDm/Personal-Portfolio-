@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:provider/provider.dart';
 import '../widgets/navbar.dart';
 import '../widgets/hero_section.dart';
 import '../widgets/portfolio_section.dart';
@@ -34,8 +35,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: themeProvider.isDarkMode ? Colors.black : Colors.white,
       body: Column(
         children: [
           Navbar(onSectionSelected: (index) => _scrollToSection(index)),

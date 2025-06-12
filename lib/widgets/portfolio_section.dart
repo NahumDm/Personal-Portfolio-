@@ -1,30 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
 import '../models/project.dart';
+import 'navbar.dart';
 
 class PortfolioSection extends StatelessWidget {
   const PortfolioSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+      color: isDarkMode ? Colors.black : Colors.white,
       child: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 0.7,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Portfolio',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Poppins',
+                  color: isDarkMode ? Colors.white : Colors.black,
                 ),
               ),
               const SizedBox(height: 32),
-              _buildProjectList(),
+              _buildProjectList(isDarkMode),
             ],
           ),
         ),
@@ -32,12 +39,12 @@ class PortfolioSection extends StatelessWidget {
     );
   }
 
-  Widget _buildProjectList() {
+  Widget _buildProjectList(bool isDarkMode) {
     final projects = [
       Project(
         title: 'SSGI-Fix',
         description:
-            '''A Flutter-based mobile app for the Space Science and Geospatial Institute of Ethiopia, streamlining failure reporting and user management for administrative and research teams.\n Built with Flutter and Firebase tech tools''',
+            '''A Flutter-based mobile app for the Space Science and Geospatial Institute of Ethiopia, streamlining failure reporting and user management for administrative and research teams.\nBuilt with Flutter and Firebase technologies.''',
         imagePath: 'assets/image/ssgi-image.png',
         liveUrl: '',
         sourceCodeUrl: '',
@@ -50,7 +57,7 @@ class PortfolioSection extends StatelessWidget {
           projects.map((project) {
             return Column(
               children: [
-                _ProjectCard(project: project),
+                _ProjectCard(project: project, isDarkMode: isDarkMode),
                 const SizedBox(height: 30),
               ],
             );
@@ -61,8 +68,9 @@ class PortfolioSection extends StatelessWidget {
 
 class _ProjectCard extends StatelessWidget {
   final Project project;
+  final bool isDarkMode;
 
-  const _ProjectCard({required this.project});
+  const _ProjectCard({required this.project, required this.isDarkMode});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +80,7 @@ class _ProjectCard extends StatelessWidget {
 
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDarkMode ? Colors.grey.shade900 : Colors.white,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -123,10 +131,11 @@ class _ProjectCard extends StatelessWidget {
         children: [
           Text(
             project.title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               fontFamily: 'Poppins',
+              color: isDarkMode ? Colors.white : Colors.black,
             ),
           ),
           const SizedBox(height: 16),
@@ -134,7 +143,7 @@ class _ProjectCard extends StatelessWidget {
             text: TextSpan(
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey.shade700,
+                color: isDarkMode ? Colors.grey.shade300 : Colors.grey.shade700,
                 height: 1.5,
                 fontFamily: 'Open Sans',
               ),
@@ -142,10 +151,10 @@ class _ProjectCard extends StatelessWidget {
                 TextSpan(text: project.description),
                 const TextSpan(text: '\n\n'),
                 TextSpan(
-                  text: 'I Worked as Frontend Engineer',
+                  text: '- Implemented responsive and user-friendly interface',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: isDarkMode ? Colors.white : Colors.black87,
                   ),
                 ),
               ],
@@ -165,18 +174,31 @@ class _ProjectCard extends StatelessWidget {
                           vertical: 12,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
+                          color:
+                              isDarkMode
+                                  ? Colors.grey.shade800
+                                  : Colors.grey.shade200,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.lock, size: 16, color: Colors.grey),
+                            Icon(
+                              Icons.lock,
+                              size: 16,
+                              color:
+                                  isDarkMode
+                                      ? Colors.grey.shade400
+                                      : Colors.grey,
+                            ),
                             const SizedBox(width: 8),
-                            const Text(
+                            Text(
                               'NDA Protected',
                               style: TextStyle(
-                                color: Colors.grey,
+                                color:
+                                    isDarkMode
+                                        ? Colors.grey.shade400
+                                        : Colors.grey,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -189,6 +211,7 @@ class _ProjectCard extends StatelessWidget {
                           label: 'View Live',
                           icon: Icons.launch,
                           onTap: () => _launchUrl(project.liveUrl!),
+                          isDarkMode: isDarkMode,
                         ),
                       if (project.liveUrl != null &&
                           project.sourceCodeUrl != null)
@@ -198,6 +221,7 @@ class _ProjectCard extends StatelessWidget {
                           label: 'Source Code',
                           icon: Icons.code,
                           onTap: () => _launchUrl(project.sourceCodeUrl!),
+                          isDarkMode: isDarkMode,
                         ),
                     ],
                   ],
@@ -212,18 +236,31 @@ class _ProjectCard extends StatelessWidget {
                           vertical: 12,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
+                          color:
+                              isDarkMode
+                                  ? Colors.grey.shade800
+                                  : Colors.grey.shade200,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.lock, size: 16, color: Colors.grey),
+                            Icon(
+                              Icons.lock,
+                              size: 16,
+                              color:
+                                  isDarkMode
+                                      ? Colors.grey.shade400
+                                      : Colors.grey,
+                            ),
                             const SizedBox(width: 8),
-                            const Text(
+                            Text(
                               'NDA Protected',
                               style: TextStyle(
-                                color: Colors.grey,
+                                color:
+                                    isDarkMode
+                                        ? Colors.grey.shade400
+                                        : Colors.grey,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -236,6 +273,7 @@ class _ProjectCard extends StatelessWidget {
                           label: 'View Live',
                           icon: Icons.launch,
                           onTap: () => _launchUrl(project.liveUrl!),
+                          isDarkMode: isDarkMode,
                         ),
                       if (project.liveUrl != null &&
                           project.sourceCodeUrl != null)
@@ -245,6 +283,7 @@ class _ProjectCard extends StatelessWidget {
                           label: 'Source Code',
                           icon: Icons.code,
                           onTap: () => _launchUrl(project.sourceCodeUrl!),
+                          isDarkMode: isDarkMode,
                         ),
                     ],
                   ],
@@ -260,7 +299,7 @@ class _ProjectCard extends StatelessWidget {
   Future<void> _launchUrl(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
   }
 }
@@ -269,24 +308,43 @@ class _ActionButton extends StatelessWidget {
   final String label;
   final IconData icon;
   final VoidCallback onTap;
+  final bool isDarkMode;
 
   const _ActionButton({
     required this.label,
     required this.icon,
     required this.onTap,
+    required this.isDarkMode,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: onTap,
-      icon: Icon(icon, size: 18),
-      label: Text(label),
-      style: ElevatedButton.styleFrom(
+    return InkWell(
+      onTap: onTap,
+      child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        decoration: BoxDecoration(
+          color: isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 16,
+              color: isDarkMode ? Colors.grey.shade400 : Colors.grey,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: isDarkMode ? Colors.grey.shade400 : Colors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
