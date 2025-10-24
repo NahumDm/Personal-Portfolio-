@@ -37,6 +37,7 @@ flutter:
     - assets/image/certificates/alx.png
     - assets/image/certificates/Voluntary.png
     - assets/image/certificates/PF.png
+    - assets/image/logo/ssgi-logo.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
