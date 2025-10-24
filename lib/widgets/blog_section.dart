@@ -26,7 +26,7 @@ class BlogSection extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'I share updates from my journey in tech—side projects, personal insights, and the latest trends. My blog is a Telegram channel called “Narke Dev,” where I\’m always learning and growing. Join me there!',
+                'I share updates from my journey in tech—side projects, personal insights, and the latest trends. My blog is a Telegram channel called “Narke Dev,” where I’m always learning and growing. Join me there!',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey.shade700,
@@ -37,8 +37,7 @@ class BlogSection extends StatelessWidget {
               SizedBox(
                 width: 300,
                 child: ElevatedButton.icon(
-                  onPressed:
-                      () => _launchUrl('https://t.me/Narke_Dev'),
+                  onPressed: () => _launchUrl('https://t.me/Narke_Dev'),
                   icon: const FaIcon(FontAwesomeIcons.telegram),
                   label: const Text(
                     'Visit the channel',

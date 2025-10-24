@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:personal_portfolio/widgets/recognitions_section.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
-import 'package:provider/provider.dart';
 import '../widgets/navbar.dart';
 import '../widgets/hero_section.dart';
 import '../widgets/portfolio_section.dart';
-import '../widgets/contact_section.dart';
-import '../widgets/blog_section.dart';
 import '../widgets/education_section.dart';
-import '../widgets/recognitions_section.dart';
+import '../widgets/projects_section.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,27 +16,26 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final AutoScrollController _scrollController = AutoScrollController();
-  final List<String> _sections = [
-    'portfolio',
-    'education',
-    'contact',
-    'blog',
-    'resume',
-  ];
 
   void _scrollToSection(int index) {
-    _scrollController.scrollToIndex(
-      index,
-      preferPosition: AutoScrollPosition.begin,
-    );
+    if (index == -1) {
+      _scrollController.animateTo(
+        0.0,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      _scrollController.scrollToIndex(
+        index,
+        preferPosition: AutoScrollPosition.begin,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
     return Scaffold(
-      backgroundColor: themeProvider.isDarkMode ? Colors.black : Colors.white,
+      backgroundColor: const Color(0xFF232323),
       body: Column(
         children: [
           Navbar(onSectionSelected: (index) => _scrollToSection(index)),
@@ -49,30 +46,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const HeroSection(),
                   AutoScrollTag(
-                    key: const ValueKey('portfolio'),
+                    key: const ValueKey('experience'),
                     index: 0,
                     controller: _scrollController,
                     child: const PortfolioSection(),
                   ),
                   AutoScrollTag(
-                    key: const ValueKey('education'),
+                    key: const ValueKey('projects'),
                     index: 1,
+                    controller: _scrollController,
+                    child: const ProjectsSection(),
+                  ),
+                  AutoScrollTag(
+                    key: const ValueKey('education'),
+                    index: 2,
                     controller: _scrollController,
                     child: const EducationSection(),
                   ),
                   const RecognitionsSection(),
-                  AutoScrollTag(
-                    key: const ValueKey('contact'),
-                    index: 2,
-                    controller: _scrollController,
-                    child: const ContactSection(),
-                  ),
-                  AutoScrollTag(
-                    key: const ValueKey('blog'),
-                    index: 3,
-                    controller: _scrollController,
-                    child: const BlogSection(),
-                  ),
                 ],
               ),
             ),

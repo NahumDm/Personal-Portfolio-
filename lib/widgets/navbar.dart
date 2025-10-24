@@ -1,17 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:provider/provider.dart';
-
-class ThemeProvider extends ChangeNotifier {
-  bool _isDarkMode = false;
-
-  bool get isDarkMode => _isDarkMode;
-
-  void toggleTheme() {
-    _isDarkMode = !_isDarkMode;
-    notifyListeners();
-  }
-}
 
 class Navbar extends StatelessWidget {
   final Function(int) onSectionSelected;
@@ -30,13 +19,10 @@ class Navbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-    final isDarkMode = themeProvider.isDarkMode;
-
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       decoration: BoxDecoration(
-        color: isDarkMode ? Colors.black : Colors.white,
+        color: const Color(0xFF232323),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -46,17 +32,23 @@ class Navbar extends StatelessWidget {
         ],
       ),
       child: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.7,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.8,
           child: LayoutBuilder(
             builder: (context, constraints) {
               if (constraints.maxWidth < 600) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [_buildMobileNav(isDarkMode), _buildThemeToggle()],
+                  children: [
+                    _NavItem(
+                      title: 'Narke',
+                      onTap: () => onSectionSelected(-1),
+                    ),
+                    _buildMobileNav(),
+                  ],
                 );
               } else {
-                return _buildDesktopNav(isDarkMode);
+                return _buildDesktopNav();
               }
             },
           ),
@@ -65,88 +57,67 @@ class Navbar extends StatelessWidget {
     );
   }
 
-  Widget _buildDesktopNav(bool isDarkMode) {
+  Widget _buildDesktopNav() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _NavItem(
-          title: 'Portfolio',
-          onTap: () => onSectionSelected(0),
-          isDarkMode: isDarkMode,
+        _NavItem(title: 'Narke', onTap: () => onSectionSelected(-1)),
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(width: 70),
+              _NavItem(title: 'Experience', onTap: () => onSectionSelected(0)),
+              const SizedBox(width: 60),
+              _NavItem(title: 'Projects', onTap: () => onSectionSelected(1)),
+              const SizedBox(width: 60),
+              _NavItem(title: 'Education', onTap: () => onSectionSelected(2)),
+            ],
+          ),
         ),
-        _NavItem(
-          title: 'Education',
-          onTap: () => onSectionSelected(1),
-          isDarkMode: isDarkMode,
-        ),
-        _NavItem(
-          title: 'Contact',
-          onTap: () => onSectionSelected(2),
-          isDarkMode: isDarkMode,
-        ),
-        _NavItem(
-          title: 'Blog',
-          onTap: () => onSectionSelected(3),
-          isDarkMode: isDarkMode,
-        ),
-        _NavItem(
-          title: 'Resume',
-          onTap: _downloadResume,
-          isDarkMode: isDarkMode,
-        ),
-        _buildThemeToggle(),
+        _NavItem(title: 'Resume', onTap: _downloadResume),
       ],
     );
   }
 
-  Widget _buildMobileNav(bool isDarkMode) {
+  Widget _buildMobileNav() {
     return PopupMenuButton<int>(
-      icon: Icon(Icons.menu, color: isDarkMode ? Colors.white : Colors.black),
-      color: isDarkMode ? Colors.grey.shade900 : Colors.white,
+      icon: Icon(Icons.menu, color: const Color(0xFFFCEAFF).withOpacity(0.7)),
+      color: const Color(0xFF232323),
       itemBuilder:
           (context) => [
             PopupMenuItem(
               value: 0,
               child: Text(
-                'Portfolio',
-                style: TextStyle(
-                  color: isDarkMode ? Colors.white : Colors.black,
+                'Experience',
+                style: GoogleFonts.montserrat(
+                  color: const Color(0xFFFCEAFF).withOpacity(0.7),
                 ),
               ),
             ),
             PopupMenuItem(
               value: 1,
               child: Text(
-                'Education',
-                style: TextStyle(
-                  color: isDarkMode ? Colors.white : Colors.black,
+                'Projects',
+                style: GoogleFonts.montserrat(
+                  color: const Color(0xFFFCEAFF).withOpacity(0.7),
                 ),
               ),
             ),
             PopupMenuItem(
               value: 2,
               child: Text(
-                'Contact',
-                style: TextStyle(
-                  color: isDarkMode ? Colors.white : Colors.black,
+                'Education',
+                style: GoogleFonts.montserrat(
+                  color: const Color(0xFFFCEAFF).withOpacity(0.7),
                 ),
               ),
             ),
             PopupMenuItem(
               value: 3,
               child: Text(
-                'Blog',
-                style: TextStyle(
-                  color: isDarkMode ? Colors.white : Colors.black,
-                ),
-              ),
-            ),
-            PopupMenuItem(
-              value: 4,
-              child: Text(
                 'Resume',
-                style: TextStyle(
-                  color: isDarkMode ? Colors.white : Colors.black,
+                style: GoogleFonts.montserrat(
+                  color: const Color(0xFFFCEAFF).withOpacity(0.7),
                 ),
               ),
               onTap: () {
@@ -155,54 +126,91 @@ class Navbar extends StatelessWidget {
             ),
           ],
       onSelected: (index) {
-        if (index != 4) {
+        if (index != 3) {
           onSectionSelected(index);
         }
       },
     );
   }
-
-  Widget _buildThemeToggle() {
-    return Consumer<ThemeProvider>(
-      builder: (context, themeProvider, child) {
-        return IconButton(
-          icon: Icon(
-            themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
-            color: themeProvider.isDarkMode ? Colors.white : Colors.black,
-          ),
-          onPressed: () {
-            themeProvider.toggleTheme();
-          },
-        );
-      },
-    );
-  }
 }
 
-class _NavItem extends StatelessWidget {
+class _NavItem extends StatefulWidget {
   final String title;
   final VoidCallback onTap;
-  final bool isDarkMode;
 
-  const _NavItem({
-    required this.title,
-    required this.onTap,
-    required this.isDarkMode,
-  });
+  const _NavItem({required this.title, required this.onTap});
+
+  @override
+  State<_NavItem> createState() => _NavItemState();
+}
+
+class _NavItemState extends State<_NavItem>
+    with SingleTickerProviderStateMixin {
+  bool isHovered = false;
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: isDarkMode ? Colors.white : Colors.black,
-          ),
+    return MouseRegion(
+      onEnter: (_) {
+        setState(() => isHovered = true);
+        _controller.forward();
+      },
+      onExit: (_) {
+        setState(() => isHovered = false);
+        _controller.reverse();
+      },
+      child: InkWell(
+        onTap: widget.onTap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedScale(
+              duration: const Duration(milliseconds: 200),
+              scale: isHovered ? 1.1 : 1.0,
+              child: Text(
+                widget.title,
+                style: GoogleFonts.montserrat(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color:
+                      isHovered
+                          ? const Color(0xFFfd6000)
+                          : const Color(0xFFe2ccff),
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            AnimatedBuilder(
+              animation: _animation,
+              builder: (context, child) {
+                return Container(
+                  height: 2,
+                  width:
+                      _animation.value *
+                      (widget.title.length * 8.0), // Approximate width
+                  color: const Color(0xFFfd6000),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
