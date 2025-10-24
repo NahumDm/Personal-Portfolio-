@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:personal_portfolio/widgets/social_contact.dart';
@@ -31,7 +30,7 @@ class HeroSection extends StatelessWidget {
                     if (isSmallScreen) ...[
                       _buildProfileImage(isSmall: true),
                       const SizedBox(height: 24),
-                      _buildTextContent(),
+                      _buildTextContent(isSmall: true),
                     ] else ...[
                       // Displays a different layout for large screens.
                       Stack(
@@ -83,25 +82,30 @@ class HeroSection extends StatelessWidget {
     // For small screens use a fixed size circle; for larger screens
     // use a FractionallySizedBox so the image fills ~90% of its column
     if (isSmall) {
-      return Container(
-        width: 70,
-        height: 70,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.grey.shade300, width: 2),
-        ),
-        child: Center(
-          child: ClipOval(
-            child: Image.asset(
-              'assets/image/nahomdesta.png',
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                // Displays a placeholder if the image fails to load.
-                return Container(
-                  color: Colors.grey.shade200,
-                  child: const Icon(Icons.person, size: 70, color: Colors.grey),
-                );
-              },
+      return AspectRatio(
+        aspectRatio: 1.5,
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.grey.shade300, width: 2),
+          ),
+          child: Center(
+            child: ClipOval(
+              child: Image.asset(
+                'assets/image/nahomdesta.png',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  // Displays a placeholder if the image fails to load.
+                  return Container(
+                    color: Colors.grey.shade200,
+                    child: const Icon(
+                      Icons.person,
+                      size: 70,
+                      color: Colors.grey,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -135,11 +139,29 @@ class HeroSection extends StatelessWidget {
     );
   }
 
-  Widget _buildTextContent() {
+  Widget _buildTextContent({bool isSmall = false}) {
     // Builds the text content of the hero section.
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (isSmall) ...[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFfd6000),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Text(
+              "Hi, I'm Nahom Desta",
+              style: GoogleFonts.poppins(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF232323),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
         Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -147,7 +169,7 @@ class HeroSection extends StatelessWidget {
               Text(
                 'Full Stack Mobile App Developer ',
                 style: GoogleFonts.poppins(
-                  fontSize: 28,
+                  fontSize: isSmall ? 20 : 28,
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFFFCEAFF),
                   shadows: [
@@ -163,7 +185,7 @@ class HeroSection extends StatelessWidget {
               Text(
                 '- iOS & Android',
                 style: GoogleFonts.poppins(
-                  fontSize: 28,
+                  fontSize: isSmall ? 20 : 28,
                   fontWeight: FontWeight.normal,
                   color: const Color(0xFFFCEAFF),
                   shadows: [
@@ -181,7 +203,10 @@ class HeroSection extends StatelessWidget {
         ),
         const SizedBox(height: 50),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment:
+              isSmall
+                  ? MainAxisAlignment.center
+                  : MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
@@ -195,29 +220,30 @@ class HeroSection extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const SocialContactSection(),
+                const SocialContactSection(isSmall: true),
               ],
             ),
-            Column(
-              children: [
-                Text(
-                  'Location',
-                  style: GoogleFonts.poppins(
-                    fontSize: 15,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.grey.withOpacity(0.7),
+            if (!isSmall)
+              Column(
+                children: [
+                  Text(
+                    'Location',
+                    style: GoogleFonts.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.grey.withOpacity(0.7),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'Addis Ababa, ET/Remote',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    color: const Color(0xFFe2ccff),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Addis Ababa, ET/Remote',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      color: const Color(0xFFe2ccff),
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
           ],
         ),
       ],

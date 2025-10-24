@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:personal_portfolio/widgets/experience_section.dart';
 import 'package:personal_portfolio/widgets/recognitions_section.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import '../widgets/navbar.dart';
 import '../widgets/hero_section.dart';
-import '../widgets/portfolio_section.dart';
 import '../widgets/education_section.dart';
 import '../widgets/projects_section.dart';
 
@@ -49,13 +49,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     key: const ValueKey('experience'),
                     index: 0,
                     controller: _scrollController,
-                    child: const PortfolioSection(),
+                    child: const ExperienceSection(),
                   ),
                   AutoScrollTag(
                     key: const ValueKey('projects'),
                     index: 1,
                     controller: _scrollController,
-                    child: const ProjectsSection(),
+                    child: const ProjectSection(),
                   ),
                   AutoScrollTag(
                     key: const ValueKey('education'),
