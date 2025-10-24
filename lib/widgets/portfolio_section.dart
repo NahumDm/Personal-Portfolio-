@@ -1,37 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:provider/provider.dart';
 import '../models/project.dart';
-import 'navbar.dart';
 
 class PortfolioSection extends StatelessWidget {
   const PortfolioSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-    final isDarkMode = themeProvider.isDarkMode;
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
-      color: isDarkMode ? Colors.black : Colors.white,
+      color: const Color(0xFF232323),
       child: Center(
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.7,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Portfolio',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Poppins',
-                  color: isDarkMode ? Colors.white : Colors.black,
+                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 32),
-              _buildProjectList(isDarkMode),
+              _buildProjectList(),
             ],
           ),
         ),
@@ -39,7 +34,7 @@ class PortfolioSection extends StatelessWidget {
     );
   }
 
-  Widget _buildProjectList(bool isDarkMode) {
+  Widget _buildProjectList() {
     final projects = [
       Project(
         title: 'SSGI-Fix',
@@ -57,7 +52,7 @@ class PortfolioSection extends StatelessWidget {
           projects.map((project) {
             return Column(
               children: [
-                _ProjectCard(project: project, isDarkMode: isDarkMode),
+                _ProjectCard(project: project),
                 const SizedBox(height: 30),
               ],
             );
@@ -68,9 +63,8 @@ class PortfolioSection extends StatelessWidget {
 
 class _ProjectCard extends StatelessWidget {
   final Project project;
-  final bool isDarkMode;
 
-  const _ProjectCard({required this.project, required this.isDarkMode});
+  const _ProjectCard({required this.project});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +74,7 @@ class _ProjectCard extends StatelessWidget {
 
         return Container(
           decoration: BoxDecoration(
-            color: isDarkMode ? Colors.grey.shade900 : Colors.white,
+            color: Colors.grey.shade900,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -131,11 +125,11 @@ class _ProjectCard extends StatelessWidget {
         children: [
           Text(
             project.title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               fontFamily: 'Poppins',
-              color: isDarkMode ? Colors.white : Colors.black,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 16),
@@ -143,18 +137,18 @@ class _ProjectCard extends StatelessWidget {
             text: TextSpan(
               style: TextStyle(
                 fontSize: 14,
-                color: isDarkMode ? Colors.grey.shade300 : Colors.grey.shade700,
+                color: Colors.grey.shade300,
                 height: 1.5,
                 fontFamily: 'Open Sans',
               ),
               children: [
                 TextSpan(text: project.description),
                 const TextSpan(text: '\n\n'),
-                TextSpan(
+                const TextSpan(
                   text: '- Implemented responsive and user-friendly interface',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: isDarkMode ? Colors.white : Colors.black87,
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -174,10 +168,7 @@ class _ProjectCard extends StatelessWidget {
                           vertical: 12,
                         ),
                         decoration: BoxDecoration(
-                          color:
-                              isDarkMode
-                                  ? Colors.grey.shade800
-                                  : Colors.grey.shade200,
+                          color: Colors.grey.shade800,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
@@ -186,19 +177,13 @@ class _ProjectCard extends StatelessWidget {
                             Icon(
                               Icons.lock,
                               size: 16,
-                              color:
-                                  isDarkMode
-                                      ? Colors.grey.shade400
-                                      : Colors.grey,
+                              color: Colors.grey.shade400,
                             ),
                             const SizedBox(width: 8),
                             Text(
                               'NDA Protected',
                               style: TextStyle(
-                                color:
-                                    isDarkMode
-                                        ? Colors.grey.shade400
-                                        : Colors.grey,
+                                color: Colors.grey.shade400,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -211,7 +196,6 @@ class _ProjectCard extends StatelessWidget {
                           label: 'View Live',
                           icon: Icons.launch,
                           onTap: () => _launchUrl(project.liveUrl!),
-                          isDarkMode: isDarkMode,
                         ),
                       if (project.liveUrl != null &&
                           project.sourceCodeUrl != null)
@@ -221,7 +205,6 @@ class _ProjectCard extends StatelessWidget {
                           label: 'Source Code',
                           icon: Icons.code,
                           onTap: () => _launchUrl(project.sourceCodeUrl!),
-                          isDarkMode: isDarkMode,
                         ),
                     ],
                   ],
@@ -236,10 +219,7 @@ class _ProjectCard extends StatelessWidget {
                           vertical: 12,
                         ),
                         decoration: BoxDecoration(
-                          color:
-                              isDarkMode
-                                  ? Colors.grey.shade800
-                                  : Colors.grey.shade200,
+                          color: Colors.grey.shade800,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
@@ -248,19 +228,13 @@ class _ProjectCard extends StatelessWidget {
                             Icon(
                               Icons.lock,
                               size: 16,
-                              color:
-                                  isDarkMode
-                                      ? Colors.grey.shade400
-                                      : Colors.grey,
+                              color: Colors.grey.shade400,
                             ),
                             const SizedBox(width: 8),
                             Text(
                               'NDA Protected',
                               style: TextStyle(
-                                color:
-                                    isDarkMode
-                                        ? Colors.grey.shade400
-                                        : Colors.grey,
+                                color: Colors.grey.shade400,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -273,7 +247,6 @@ class _ProjectCard extends StatelessWidget {
                           label: 'View Live',
                           icon: Icons.launch,
                           onTap: () => _launchUrl(project.liveUrl!),
-                          isDarkMode: isDarkMode,
                         ),
                       if (project.liveUrl != null &&
                           project.sourceCodeUrl != null)
@@ -283,7 +256,6 @@ class _ProjectCard extends StatelessWidget {
                           label: 'Source Code',
                           icon: Icons.code,
                           onTap: () => _launchUrl(project.sourceCodeUrl!),
-                          isDarkMode: isDarkMode,
                         ),
                     ],
                   ],
@@ -308,13 +280,11 @@ class _ActionButton extends StatelessWidget {
   final String label;
   final IconData icon;
   final VoidCallback onTap;
-  final bool isDarkMode;
 
   const _ActionButton({
     required this.label,
     required this.icon,
     required this.onTap,
-    required this.isDarkMode,
   });
 
   @override
@@ -324,22 +294,18 @@ class _ActionButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(
-          color: isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200,
+          color: Colors.grey.shade800,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: 16,
-              color: isDarkMode ? Colors.grey.shade400 : Colors.grey,
-            ),
+            Icon(icon, size: 16, color: Colors.grey.shade400),
             const SizedBox(width: 8),
             Text(
               label,
               style: TextStyle(
-                color: isDarkMode ? Colors.grey.shade400 : Colors.grey,
+                color: Colors.grey.shade400,
                 fontWeight: FontWeight.w500,
               ),
             ),

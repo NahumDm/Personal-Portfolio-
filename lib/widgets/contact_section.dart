@@ -21,7 +21,7 @@ class _ContactSectionState extends State<ContactSection> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
       child: Center(
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.7,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
