@@ -14,10 +14,11 @@ class _ContactSectionState extends State<ContactSection> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  static const String _phoneNumber = '+251 90 000 0000';
-  static const String _emailAddress = 'nahomdestamg@gmail.com';
-  static const String _location = 'Addis Ababa, Ethiopia / Remote';
+  static const String _phoneNumber = '+251 983204356';
+  static const String _emailAddress = 'nahomdesta.dev@gmail.com';
+  static const String _location = 'Addis Ababa, Ethiopia';
 
   @override
   void dispose() {
@@ -39,13 +40,41 @@ class _ContactSectionState extends State<ContactSection> {
     }
   }
 
-  void _handleSend() {
+  Future<void> _handleSend() async {
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill out all required fields.')),
+      );
+      return;
+    }
+
     FocusScope.of(context).unfocus();
+    final subject = Uri.encodeComponent('Portfolio Contact Message');
+    final body = Uri.encodeComponent(
+      'Name: ${_nameController.text}\n'
+      'Phone: ${_phoneController.text}\n'
+      'Email: ${_emailController.text}\n\n'
+      'Message:\n${_messageController.text}',
+    );
+
+    final mailUri = Uri.parse(
+      'mailto:$_emailAddress?subject=$subject&body=$body',
+    );
+    final launched = await launchUrl(mailUri);
+
+    if (!launched) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open your mail client.')),
+      );
+      return;
+    }
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Thanks for reaching out! I\'ll be in touch soon.'),
       ),
     );
+    _formKey.currentState?.reset();
     _nameController.clear();
     _phoneController.clear();
     _emailController.clear();
@@ -56,18 +85,20 @@ class _ContactSectionState extends State<ContactSection> {
     return InputDecoration(
       hintText: hint,
       hintStyle: GoogleFonts.poppins(
+        // ignore: deprecated_member_use
         color: Colors.white.withOpacity(0.6),
         fontSize: 14,
       ),
       filled: true,
       fillColor: const Color(0xFF2D2D2D),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
+        // ignore: deprecated_member_use
         borderSide: BorderSide(color: Colors.white.withOpacity(0.05)),
       ),
       focusedBorder: OutlineInputBorder(
@@ -99,10 +130,7 @@ class _ContactSectionState extends State<ContactSection> {
       height: 1.6,
     );
 
-    final linkStyle = bodyStyle.copyWith(
-      color: const Color(0xFFfd6000),
-      decoration: TextDecoration.underline,
-    );
+    final highlightColor = const Color(0xFFfd6000);
 
     return Container(
       color: const Color(0xFF232323),
@@ -121,20 +149,20 @@ class _ContactSectionState extends State<ContactSection> {
                       child: _buildIntroColumn(
                         headingStyle,
                         bodyStyle,
-                        linkStyle,
+                        highlightColor,
                       ),
                     ),
                     const SizedBox(width: 48),
-                    Expanded(child: _buildForm(bodyStyle)),
+                    Expanded(child: _buildForm(bodyStyle, highlightColor)),
                   ],
                 );
               }
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildIntroColumn(headingStyle, bodyStyle, linkStyle),
+                  _buildIntroColumn(headingStyle, bodyStyle, highlightColor),
                   const SizedBox(height: 32),
-                  _buildForm(bodyStyle),
+                  _buildForm(bodyStyle, highlightColor),
                 ],
               );
             },
@@ -147,7 +175,7 @@ class _ContactSectionState extends State<ContactSection> {
   Widget _buildIntroColumn(
     TextStyle headingStyle,
     TextStyle bodyStyle,
-    TextStyle linkStyle,
+    Color highlightColor,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,14 +193,62 @@ class _ContactSectionState extends State<ContactSection> {
             GestureDetector(
               onTap:
                   () => _launchUrl('tel:${_phoneNumber.replaceAll(' ', '')}'),
-              child: Text('Phone: $_phoneNumber', style: linkStyle),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Phone:',
+                    style: bodyStyle.copyWith(
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    _phoneNumber,
+                    style: bodyStyle.copyWith(color: highlightColor),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 12),
-            Text('Address: $_location', style: bodyStyle),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Address:',
+                  style: bodyStyle.copyWith(
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  _location,
+                  style: bodyStyle.copyWith(color: highlightColor),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
             GestureDetector(
               onTap: () => _launchUrl('mailto:$_emailAddress'),
-              child: Text('Email: $_emailAddress', style: linkStyle),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Email:',
+                    style: bodyStyle.copyWith(
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    _emailAddress,
+                    style: bodyStyle.copyWith(color: highlightColor),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -180,65 +256,123 @@ class _ContactSectionState extends State<ContactSection> {
     );
   }
 
-  Widget _buildForm(TextStyle textStyle) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        TextField(
-          controller: _nameController,
-          style: textStyle,
-          cursorColor: const Color(0xFFfd6000),
-          decoration: _inputDecoration('Your name'),
-        ),
-        const SizedBox(height: 18),
-        TextField(
-          controller: _phoneController,
-          style: textStyle,
-          cursorColor: const Color(0xFFfd6000),
-          keyboardType: TextInputType.phone,
-          decoration: _inputDecoration('Phone number'),
-        ),
-        const SizedBox(height: 18),
-        TextField(
-          controller: _emailController,
-          style: textStyle,
-          cursorColor: const Color(0xFFfd6000),
-          keyboardType: TextInputType.emailAddress,
-          decoration: _inputDecoration('Email address'),
-        ),
-        const SizedBox(height: 18),
-        TextField(
-          controller: _messageController,
-          style: textStyle,
-          cursorColor: const Color(0xFFfd6000),
-          keyboardType: TextInputType.multiline,
-          minLines: 7,
-          maxLines: null,
-          decoration: _inputDecoration('Your message'),
-        ),
-        const SizedBox(height: 24),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: ElevatedButton(
-            onPressed: _handleSend,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFfd6000),
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+  Widget _buildForm(TextStyle textStyle, Color highlightColor) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildRequiredLabel('Name', textStyle, highlightColor),
+          const SizedBox(height: 6),
+          TextFormField(
+            controller: _nameController,
+            style: textStyle,
+            cursorColor: const Color(0xFFfd6000),
+            decoration: _inputDecoration('Your name'),
+            validator:
+                (value) =>
+                    value == null || value.trim().isEmpty
+                        ? 'Name is required.'
+                        : null,
+          ),
+          const SizedBox(height: 18),
+          _buildRequiredLabel('Phone', textStyle, highlightColor),
+          const SizedBox(height: 6),
+          TextFormField(
+            controller: _phoneController,
+            style: textStyle,
+            cursorColor: const Color(0xFFfd6000),
+            keyboardType: TextInputType.phone,
+            decoration: _inputDecoration('Phone number'),
+            validator:
+                (value) =>
+                    value == null || value.trim().isEmpty
+                        ? 'Phone number is required.'
+                        : null,
+          ),
+          const SizedBox(height: 18),
+          _buildRequiredLabel('Email', textStyle, highlightColor),
+          const SizedBox(height: 6),
+          TextFormField(
+            controller: _emailController,
+            style: textStyle,
+            cursorColor: const Color(0xFFfd6000),
+            keyboardType: TextInputType.emailAddress,
+            decoration: _inputDecoration('Email address'),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Email is required.';
+              }
+              final emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+              if (!emailPattern.hasMatch(value.trim())) {
+                return 'Enter a valid email address.';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 18),
+          _buildRequiredLabel('Message', textStyle, highlightColor),
+          const SizedBox(height: 6),
+          TextFormField(
+            controller: _messageController,
+            style: textStyle,
+            cursorColor: const Color(0xFFfd6000),
+            keyboardType: TextInputType.multiline,
+            minLines: 7,
+            maxLines: null,
+            decoration: _inputDecoration('Your message'),
+            validator:
+                (value) =>
+                    value == null || value.trim().isEmpty
+                        ? 'Message is required.'
+                        : null,
+          ),
+          const SizedBox(height: 24),
+          Align(
+            alignment: Alignment.center,
+            child: ElevatedButton(
+              onPressed: _handleSend,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFfd6000),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 36,
+                  vertical: 16,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
-            ),
-            child: Text(
-              'Send',
-              style: GoogleFonts.montserrat(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+              child: Text(
+                'Send',
+                style: GoogleFonts.montserrat(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRequiredLabel(
+    String label,
+    TextStyle textStyle,
+    Color highlightColor,
+  ) {
+    return RichText(
+      text: TextSpan(
+        style: textStyle.copyWith(
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
         ),
-      ],
+        children: [
+          TextSpan(text: label),
+          TextSpan(text: ' *', style: TextStyle(color: highlightColor)),
+        ],
+      ),
     );
   }
 }
