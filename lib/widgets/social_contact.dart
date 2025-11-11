@@ -96,10 +96,12 @@ class _SocialButtonState extends State<_SocialButton> {
           duration: const Duration(milliseconds: 200),
           padding: EdgeInsets.all(padding),
           decoration: BoxDecoration(
+            // ignore: deprecated_member_use
             color: Colors.grey.withOpacity(0.1),
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
+                // ignore: deprecated_member_use
                 color: Colors.black.withOpacity(0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 2),

@@ -1,9 +1,27 @@
+import 'package:flutter/material.dart';
+
+/// Represents a single technology used in a project (icon & label).
+class TechStackItem {
+  final String label;
+  final String assetPath; // SVG asset path
+  final Color? color; // optional override tint if needed
+
+  const TechStackItem({
+    required this.label,
+    required this.assetPath,
+    this.color,
+  });
+}
+
 class Project {
   final String title;
   final String description;
   final String imagePath;
   final String? liveUrl;
   final String? sourceCodeUrl;
+  final List<TechStackItem> techStack;
+  // Optional per-project fixed card height (desktop); if null, height adapts to content.
+  final double? cardHeight;
 
   const Project({
     required this.title,
@@ -11,5 +29,7 @@ class Project {
     required this.imagePath,
     this.liveUrl,
     this.sourceCodeUrl,
+    this.techStack = const [],
+    this.cardHeight,
   });
 }

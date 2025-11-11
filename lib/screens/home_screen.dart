@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personal_portfolio/widgets/contact_section.dart';
 import 'package:personal_portfolio/widgets/experience_section.dart';
 import 'package:personal_portfolio/widgets/recognitions_section.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -64,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: const EducationSection(),
                   ),
                   const RecognitionsSection(),
+                  const ContactSection(),
                 ],
               ),
             ),

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:personal_portfolio/widgets/social_contact.dart';
@@ -175,6 +177,7 @@ class HeroSection extends StatelessWidget {
                   shadows: [
                     Shadow(
                       offset: const Offset(-2, 2),
+                      // ignore: 
                       color: Colors.black.withOpacity(0.5),
                       blurRadius: 2,
                     ),

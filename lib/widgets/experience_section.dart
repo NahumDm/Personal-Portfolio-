@@ -53,24 +53,25 @@ class ExperienceSection extends StatelessWidget {
       ),
       color: const Color(0xFF232323),
       child: Center(
-        child: SizedBox(
-          width:
-              MediaQuery.of(context).size.width * (isSmallScreen ? 0.95 : 0.8),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: isSmallScreen ? double.infinity : 1000,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Experience',
-                style: GoogleFonts.lato(
-                  fontSize: isSmallScreen ? 24 : 30,
+                style: GoogleFonts.montserrat(
+                  fontSize: isSmallScreen ? 24 : 26,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
               ),
               const SizedBox(height: 40),
-              ...experiences
-                  .map((exp) => _ExperienceTimelineEntry(experience: exp))
-                  .toList(),
+              ...experiences.map(
+                (exp) => _ExperienceTimelineEntry(experience: exp),
+              ),
             ],
           ),
         ),
@@ -226,8 +227,12 @@ class _ExperienceTimelineEntryState extends State<_ExperienceTimelineEntry>
             widget.experience.description,
             style: GoogleFonts.inter(
               fontSize: 14,
-              color: const Color(0xFFf5f5f5),
-              height: 1.6,
+              color:
+                  _isHovered
+                      ? const Color(0xFFf5f5f5)
+                      : const Color(0xFFD6D6D6),
+              height: 1.4,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ),
@@ -251,8 +256,12 @@ class _ExperienceTimelineEntryState extends State<_ExperienceTimelineEntry>
                     point,
                     style: GoogleFonts.inter(
                       fontSize: 14,
-                      color: const Color(0xFFf5f5f5),
-                      height: 1.6,
+                      color:
+                          _isHovered
+                              ? const Color(0xFFf5f5f5)
+                              : const Color(0xFFD6D6D6),
+                      height: 1.4,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),
@@ -305,6 +314,7 @@ class _ExperienceTimelineEntryState extends State<_ExperienceTimelineEntry>
           widget.experience.company,
           style: GoogleFonts.poppins(
             fontSize: 14,
+            // ignore: deprecated_member_use
             color: const Color(0xFFf5f5f5).withOpacity(0.8),
           ),
         ),
