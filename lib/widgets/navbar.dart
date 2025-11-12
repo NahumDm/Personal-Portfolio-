@@ -10,7 +10,7 @@ class Navbar extends StatelessWidget {
   Future<void> _downloadResume() async {
     // Using view mode instead of edit mode for better download options
     const resumeUrl =
-        'https://drive.google.com/file/d/1SOKFW6aIhTfddcV5po3V6MHODGkbUnG_/view?usp=drive_link';
+        'https://drive.google.com/file/d/1iMzI0oZWRU3MlY7ieQ9aRgAMl-kRqxbt/view?usp=sharing';
     final uri = Uri.parse(resumeUrl);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -20,11 +20,12 @@ class Navbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+      padding: const EdgeInsets.fromLTRB(24, 36, 24, 24),
       decoration: BoxDecoration(
         color: const Color(0xFF232323),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.1),
             blurRadius: 3,
             offset: const Offset(0, 2),
@@ -71,6 +72,8 @@ class Navbar extends StatelessWidget {
               _NavItem(title: 'Projects', onTap: () => onSectionSelected(1)),
               const SizedBox(width: 60),
               _NavItem(title: 'Education', onTap: () => onSectionSelected(2)),
+              const SizedBox(width: 60),
+              _NavItem(title: 'Contact', onTap: () => onSectionSelected(3)),
             ],
           ),
         ),
@@ -81,6 +84,7 @@ class Navbar extends StatelessWidget {
 
   Widget _buildMobileNav() {
     return PopupMenuButton<int>(
+      // ignore: deprecated_member_use
       icon: Icon(Icons.menu, color: const Color(0xFFFCEAFF).withOpacity(0.7)),
       color: const Color(0xFF232323),
       itemBuilder:
@@ -90,6 +94,7 @@ class Navbar extends StatelessWidget {
               child: Text(
                 'Experience',
                 style: GoogleFonts.montserrat(
+                  // ignore: deprecated_member_use
                   color: const Color(0xFFFCEAFF).withOpacity(0.7),
                 ),
               ),
@@ -99,6 +104,7 @@ class Navbar extends StatelessWidget {
               child: Text(
                 'Projects',
                 style: GoogleFonts.montserrat(
+                  // ignore: deprecated_member_use
                   color: const Color(0xFFFCEAFF).withOpacity(0.7),
                 ),
               ),
@@ -108,6 +114,7 @@ class Navbar extends StatelessWidget {
               child: Text(
                 'Education',
                 style: GoogleFonts.montserrat(
+                  // ignore: deprecated_member_use
                   color: const Color(0xFFFCEAFF).withOpacity(0.7),
                 ),
               ),
@@ -115,8 +122,19 @@ class Navbar extends StatelessWidget {
             PopupMenuItem(
               value: 3,
               child: Text(
+                'Contact',
+                style: GoogleFonts.montserrat(
+                  // ignore: deprecated_member_use
+                  color: const Color(0xFFFCEAFF).withOpacity(0.7),
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 4,
+              child: Text(
                 'Resume',
                 style: GoogleFonts.montserrat(
+                  // ignore: deprecated_member_use
                   color: const Color(0xFFFCEAFF).withOpacity(0.7),
                 ),
               ),
@@ -126,7 +144,7 @@ class Navbar extends StatelessWidget {
             ),
           ],
       onSelected: (index) {
-        if (index != 3) {
+        if (index != 4) {
           onSectionSelected(index);
         }
       },

@@ -40,6 +40,7 @@ config.js
 credentials.txt
 *.pem
 build/
+lib/services/emailjs_secrets.dart
 
 
 # Symbolication related

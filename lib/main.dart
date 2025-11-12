@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,
           primary: Colors.white,
+          // ignore: deprecated_member_use
           background: const Color(0xFF232323),
           surface: Colors.white,
         ),

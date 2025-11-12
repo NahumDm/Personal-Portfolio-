@@ -21,6 +21,8 @@ dependencies:
   google_fonts: ^6.3.2
   flutter_launcher_icons: ^0.14.4
   provider: ^6.1.5+1
+  flutter_svg: ^2.2.2
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:
@@ -33,10 +35,10 @@ flutter:
 
   assets:
     - assets/image/nahomdesta.png
-    - assets/image/ssgi-image.png
-    - assets/image/certificates/alx.png
-    - assets/image/certificates/Voluntary.png
-    - assets/image/certificates/PF.png
+    - assets/image/tech_logo/
+    - assets/image/certificates/
+    - assets/image/projects/
+    - assets/image/events/
     - assets/image/logo/ssgi-logo.jpg
 
   # To add assets to your application, add an assets section, like this:
