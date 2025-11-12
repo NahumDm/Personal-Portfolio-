@@ -40,6 +40,7 @@ class EducationSection extends StatelessWidget {
                 year: '2021 - Present',
                 description:
                     'I\'m currently pursuing my Software Engineering degree at Arba Minch University, graduating in 2026. I\'ve grown through my leadership role in AMUECSF\'s Education Department, leading bible studies, prayer times, and other activities. I also participate in the Student Peace Forum, where we promote peace, stability, and tolerance on campus. Additionally, I\'m part of AMU TechHub, where I lead DSA Team & build projects, engage in hackathons, and connect with other aspiring developers. These experiences have helped me grow as a person, student and as a community leader.',
+                institutionUrl: 'https://www.amu.edu.et/en/',
               ),
               const SizedBox(height: 24),
               const _EducationCard(
@@ -48,6 +49,7 @@ class EducationSection extends StatelessWidget {
                 year: '2022 - Present',
                 description:
                     'While pursuing my Software Engineering degree at AMU, I\'m also studying Management through a distance learning program. This allows me to broaden my knowledge in leadership and organizational principles alongside my technical skills.',
+                institutionUrl: 'https://www.amu.edu.et/en/',
               ),
             ],
           ),
@@ -62,12 +64,14 @@ class _EducationCard extends StatefulWidget {
   final String institution;
   final String year;
   final String description;
+  final String institutionUrl;
 
   const _EducationCard({
     required this.degree,
     required this.institution,
     required this.year,
     required this.description,
+    required this.institutionUrl,
   });
 
   @override
@@ -77,12 +81,11 @@ class _EducationCard extends StatefulWidget {
 class _EducationCardState extends State<_EducationCard> {
   bool _instHover = false;
 
-  static final Uri _amuUri = Uri.parse('https://www.amu.edu.et/en/');
-
   Future<void> _openInstitution() async {
-    if (!await launchUrl(_amuUri, mode: LaunchMode.externalApplication)) {
+    final uri = Uri.parse(widget.institutionUrl);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       // ignore: avoid_print
-      print('Could not launch $_amuUri');
+      print('Could not launch $uri');
     }
   }
 
