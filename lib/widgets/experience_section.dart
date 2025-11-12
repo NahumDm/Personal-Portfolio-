@@ -36,7 +36,7 @@ class ExperienceSection extends StatelessWidget {
         company: 'Space Science and Geospatial Institute',
         description:
             'A government research institute focused on aerospace, remote sensing, and geospatial sciences in Ethiopia.',
-        responsibilities: const [
+        responsibilities: [
           'Led the development of a cross-platform mobile application using Flutter for internal failure reporting & maintenance tracking system.',
           'Collaborated with administrative and research teams to gather requirements and ensure the app met user needs.',
           'Implemented a responsive UI to ensure a seamless experience on both mobile and tablet devices.',
