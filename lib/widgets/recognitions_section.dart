@@ -14,6 +14,8 @@ class _RecognitionsSectionState extends State<RecognitionsSection> {
   final ScrollController _scrollController = ScrollController();
   Timer? _autoScrollTimer;
   bool _scrollingForward = true; // To track scroll direction
+  double? _lastItemWidth;
+  double? _lastGap;
 
   @override
   void dispose() {
@@ -126,7 +128,15 @@ class _RecognitionsSectionState extends State<RecognitionsSection> {
   }
 
   void _configureAutoScroll(double itemWidth, double gap) {
-    // Always rebuild the timer so hot reload/layout changes use fresh values.
+    // Only recreate timer if parameters have changed
+    if (_lastItemWidth == itemWidth && _lastGap == gap) {
+      return;
+    }
+
+    _lastItemWidth = itemWidth;
+    _lastGap = gap;
+
+    // Cancel existing timer and create a new one with updated values
     _autoScrollTimer?.cancel();
 
     _autoScrollTimer = Timer.periodic(const Duration(seconds: 3), (_) {
