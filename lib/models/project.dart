@@ -22,6 +22,10 @@ class Project {
   final List<TechStackItem> techStack;
   // Optional per-project fixed card height (desktop); if null, height adapts to content.
   final double? cardHeight;
+  // If true, the project image will have a white background
+  final bool hasWhiteBackground;
+  // If true, an NDA badge will be shown instead of action buttons
+  final bool showNdaBadge;
 
   const Project({
     required this.title,
@@ -31,5 +35,7 @@ class Project {
     this.sourceCodeUrl,
     this.techStack = const [],
     this.cardHeight,
+    this.hasWhiteBackground = false,
+    this.showNdaBadge = false,
   });
 }
