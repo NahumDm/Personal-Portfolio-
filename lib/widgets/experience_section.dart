@@ -11,7 +11,7 @@ class Experience {
   final List<String> responsibilities;
   final String url;
 
-  Experience({
+  const Experience({
     required this.duration,
     required this.logoPath,
     required this.title,
@@ -28,7 +28,7 @@ class ExperienceSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isSmallScreen = MediaQuery.of(context).size.width < 600;
-    final experiences = [
+    const experiences = <Experience>[
       Experience(
         duration: 'Feb 2025 – July 2025',
         logoPath: 'assets/image/logo/ssgi-logo.jpg', // Placeholder logo
@@ -36,7 +36,7 @@ class ExperienceSection extends StatelessWidget {
         company: 'Space Science and Geospatial Institute',
         description:
             'A government research institute focused on aerospace, remote sensing, and geospatial sciences in Ethiopia.',
-        responsibilities: [
+        responsibilities: const [
           'Led the development of a cross-platform mobile application using Flutter for internal failure reporting & maintenance tracking system.',
           'Collaborated with administrative and research teams to gather requirements and ensure the app met user needs.',
           'Implemented a responsive UI to ensure a seamless experience on both mobile and tablet devices.',

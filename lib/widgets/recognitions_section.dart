@@ -60,7 +60,7 @@ class _RecognitionsSectionState extends State<RecognitionsSection> {
 
   Widget _buildCertificatesList() {
     // Certificates data: asset path + label shown on hover.
-    final certificates = [
+    const certificates = <Map<String, String>>[
       {
         'image': 'assets/image/certificates/CursorHackathon.png',
         'title': 'Cursor Hackathon Participation',

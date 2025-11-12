@@ -12,7 +12,7 @@ class HeroSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // Main container for the hero section.
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+      padding: const EdgeInsets.fromLTRB(24, 56, 24, 28),
       color: const Color(0xFF232323),
       child: Center(
         child: SizedBox(
@@ -40,7 +40,7 @@ class HeroSection extends StatelessWidget {
                           Column(
                             children: [
                               Center(child: _buildProfileImage(isSmall: false)),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 36),
                               _buildTextContent(),
                             ],
                           ),
@@ -162,7 +162,7 @@ class HeroSection extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
         ],
         Center(
           child: Column(
@@ -177,7 +177,7 @@ class HeroSection extends StatelessWidget {
                   shadows: [
                     Shadow(
                       offset: const Offset(-2, 2),
-                      // ignore: 
+                      // ignore:
                       color: Colors.black.withOpacity(0.5),
                       blurRadius: 2,
                     ),

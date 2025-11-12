@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+
+import '../services/emailjs_config.dart';
 
 class ContactSection extends StatefulWidget {
   const ContactSection({super.key});
@@ -15,6 +21,8 @@ class _ContactSectionState extends State<ContactSection> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isSending = false;
+  OverlayEntry? _feedbackOverlayEntry;
 
   static const String _phoneNumber = '+251 983204356';
   static const String _emailAddress = 'nahomdesta.dev@gmail.com';
@@ -26,6 +34,7 @@ class _ContactSectionState extends State<ContactSection> {
     _phoneController.dispose();
     _emailController.dispose();
     _messageController.dispose();
+    _feedbackOverlayEntry?.remove();
     super.dispose();
   }
 
@@ -42,43 +51,132 @@ class _ContactSectionState extends State<ContactSection> {
 
   Future<void> _handleSend() async {
     if (!(_formKey.currentState?.validate() ?? false)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill out all required fields.')),
+      _showFeedbackToast(
+        'Please fill in all required fields before submitting.',
       );
       return;
     }
 
     FocusScope.of(context).unfocus();
-    final subject = Uri.encodeComponent('Portfolio Contact Message');
-    final body = Uri.encodeComponent(
-      'Name: ${_nameController.text}\n'
-      'Phone: ${_phoneController.text}\n'
-      'Email: ${_emailController.text}\n\n'
-      'Message:\n${_messageController.text}',
+
+    setState(() => _isSending = true);
+
+    final response = await _sendEmail(
+      EmailJsConfig.templateParams(
+        name: _nameController.text,
+        phone: _phoneController.text,
+        email: _emailController.text,
+        time: _currentLocalTimestamp(),
+        message: _messageController.text,
+      ),
     );
 
-    final mailUri = Uri.parse(
-      'mailto:$_emailAddress?subject=$subject&body=$body',
-    );
-    final launched = await launchUrl(mailUri);
+    if (!mounted) return;
 
-    if (!launched) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not open your mail client.')),
-      );
+    setState(() => _isSending = false);
+
+    if (!response) {
+      _showFeedbackToast('Unable to send your message right now.');
       return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Thanks for reaching out! I\'ll be in touch soon.'),
-      ),
-    );
+    _showFeedbackToast('Thanks for reaching out');
     _formKey.currentState?.reset();
     _nameController.clear();
     _phoneController.clear();
     _emailController.clear();
     _messageController.clear();
+  }
+
+  void _showFeedbackToast(String message) {
+    // Present form feedback in a compact overlay near the bottom-center of the viewport.
+    _feedbackOverlayEntry?.remove();
+
+    final overlay = Overlay.of(context);
+
+    final entry = OverlayEntry(
+      builder:
+          (context) => Positioned.fill(
+            child: IgnorePointer(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFfd6000),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black45,
+                            blurRadius: 18,
+                            offset: Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 25,
+                          vertical: 10,
+                        ),
+                        child: Text(
+                          message,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+    );
+
+    overlay.insert(entry);
+    _feedbackOverlayEntry = entry;
+
+    Future.delayed(const Duration(seconds: 3), () {
+      if (!mounted) return;
+      if (_feedbackOverlayEntry == entry) {
+        _feedbackOverlayEntry?.remove();
+        _feedbackOverlayEntry = null;
+      }
+    });
+  }
+
+  String _currentLocalTimestamp() {
+    final now = DateTime.now();
+    String twoDigits(int value) => value.toString().padLeft(2, '0');
+    final date = '${now.year}-${twoDigits(now.month)}-${twoDigits(now.day)}';
+    final time =
+        '${twoDigits(now.hour)}:${twoDigits(now.minute)}:${twoDigits(now.second)}';
+    return '$date $time';
+  }
+
+  Future<bool> _sendEmail(Map<String, dynamic> templateParams) async {
+    try {
+      final response = await http.post(
+        Uri.parse('https://api.emailjs.com/api/v1.0/email/send'),
+        headers: const {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'service_id': EmailJsConfig.serviceId,
+          'template_id': EmailJsConfig.templateId,
+          'user_id': EmailJsConfig.publicKey,
+          'template_params': templateParams,
+        }),
+      );
+
+      return response.statusCode == 200;
+    } catch (_) {
+      return false;
+    }
   }
 
   InputDecoration _inputDecoration(String hint) {
@@ -197,9 +295,9 @@ class _ContactSectionState extends State<ContactSection> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Phone:',
+                    'Phone',
                     style: bodyStyle.copyWith(
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
@@ -216,9 +314,9 @@ class _ContactSectionState extends State<ContactSection> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Address:',
+                  'Address',
                   style: bodyStyle.copyWith(
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
                 ),
@@ -236,9 +334,9 @@ class _ContactSectionState extends State<ContactSection> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Email:',
+                    'Email',
                     style: bodyStyle.copyWith(
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
@@ -258,6 +356,7 @@ class _ContactSectionState extends State<ContactSection> {
 
   Widget _buildForm(TextStyle textStyle, Color highlightColor) {
     return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -283,12 +382,20 @@ class _ContactSectionState extends State<ContactSection> {
             style: textStyle,
             cursorColor: const Color(0xFFfd6000),
             keyboardType: TextInputType.phone,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9+ ]')),
+            ],
             decoration: _inputDecoration('Phone number'),
-            validator:
-                (value) =>
-                    value == null || value.trim().isEmpty
-                        ? 'Phone number is required.'
-                        : null,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Phone number is required.';
+              }
+              final sanitized = value.trim().replaceAll(' ', '');
+              if (!RegExp(r'^\+?\d+$').hasMatch(sanitized)) {
+                return 'Use digits only (plus and spaces allowed).';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 18),
           _buildRequiredLabel('Email', textStyle, highlightColor),
@@ -331,7 +438,7 @@ class _ContactSectionState extends State<ContactSection> {
           Align(
             alignment: Alignment.center,
             child: ElevatedButton(
-              onPressed: _handleSend,
+              onPressed: _isSending ? null : _handleSend,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFfd6000),
                 foregroundColor: Colors.white,
@@ -343,13 +450,25 @@ class _ContactSectionState extends State<ContactSection> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Text(
-                'Send',
-                style: GoogleFonts.montserrat(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              child:
+                  _isSending
+                      ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
+                        ),
+                      )
+                      : Text(
+                        'Send',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
             ),
           ),
         ],

@@ -44,7 +44,7 @@ class ProjectSection extends StatelessWidget {
 
   // Builds the list of project cards (data + mapping to widgets)
   Widget _buildProjectList() {
-    final projects = [
+    const projects = <Project>[
       Project(
         title: 'SSGI-Fix',
         description:
