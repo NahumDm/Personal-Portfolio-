@@ -37,24 +37,24 @@ class Navbar extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.8,
           child: LayoutBuilder(
             builder: (context, constraints) {
-              if (constraints.maxWidth < 600) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _NavItem(
-                      title: 'Narke',
-                      onTap: () => onSectionSelected(-1),
-                    ),
-                    _buildMobileNav(),
-                  ],
-                );
-              } else {
-                return _buildDesktopNav();
+              if (constraints.maxWidth < 1000) {
+                return _buildCompactNav();
               }
+              return _buildDesktopNav();
             },
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildCompactNav() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _NavItem(title: 'Narke', onTap: () => onSectionSelected(-1)),
+        _buildMobileNav(),
+      ],
     );
   }
 

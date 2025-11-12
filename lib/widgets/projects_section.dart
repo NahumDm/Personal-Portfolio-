@@ -52,7 +52,7 @@ class ProjectSection extends StatelessWidget {
         imagePath: 'assets/image/projects/ssgi-image.png',
         liveUrl: '',
         sourceCodeUrl: '',
-        techStack: const [
+        techStack: [
           TechStackItem(
             label: 'Flutter',
             assetPath: 'assets/image/tech_logo/icons8-flutter.svg',
@@ -73,7 +73,7 @@ class ProjectSection extends StatelessWidget {
             'https://github.com/NahumDm/Dawurogna-figurative-speaking/releases/tag/dawuro-proverb',
         sourceCodeUrl:
             'https://github.com/NahumDm/Dawurogna-figurative-speaking',
-        techStack: const [
+        techStack: [
           TechStackItem(
             label: 'Flutter',
             assetPath: 'assets/image/tech_logo/icons8-flutter.svg',
