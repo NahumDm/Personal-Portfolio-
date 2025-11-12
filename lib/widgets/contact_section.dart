@@ -174,7 +174,9 @@ class _ContactSectionState extends State<ContactSection> {
       );
 
       return response.statusCode == 200;
-    } catch (_) {
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error sending email: $e');
       return false;
     }
   }

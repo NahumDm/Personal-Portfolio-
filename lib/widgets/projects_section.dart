@@ -63,6 +63,7 @@ class ProjectSection extends StatelessWidget {
           ),
         ],
         cardHeight: 230,
+        showNdaBadge: true,
       ),
       Project(
         title: 'ዳውሮኛ ተረትና ምሳሌ',
@@ -80,6 +81,7 @@ class ProjectSection extends StatelessWidget {
           ),
         ],
         cardHeight: 230,
+        hasWhiteBackground: true,
       ),
       // Additional projects can be added here
     ];
@@ -192,7 +194,6 @@ class _ProjectCardState extends State<_ProjectCard> {
       color: _hover ? const Color(0xFFF7F3ED) : Colors.grey.shade600,
       width: _hover ? 2.0 : 0.1,
     );
-    final bool isDawurogna = widget.project.title == 'ዳውሮኛ ተረትና ምሳሌ';
     if (isSmall) {
       // Mobile uses fixed 220px height image
       return AnimatedContainer(
@@ -200,7 +201,7 @@ class _ProjectCardState extends State<_ProjectCard> {
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
           border: border,
-          color: isDawurogna ? Colors.white : null,
+          color: widget.project.hasWhiteBackground ? Colors.white : null,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(12),
             topRight: Radius.circular(12),
@@ -232,7 +233,7 @@ class _ProjectCardState extends State<_ProjectCard> {
           topLeft: Radius.circular(12),
           bottomLeft: Radius.circular(12),
         ),
-        color: isDawurogna ? Colors.white : null,
+        color: widget.project.hasWhiteBackground ? Colors.white : null,
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -421,10 +422,9 @@ class _ProjectCardState extends State<_ProjectCard> {
   // Renders NDA badge or action buttons on the left, tech stack icons on the right (desktop),
   // or stacked (mobile).
   Widget _actionsAndTechRow({required bool isSmall}) {
-    final Widget left =
-        widget.project.title == 'SSGI-Fix'
-            ? _ndaBadge()
-            : _actionButtons(isSmall: isSmall);
+    final Widget left = widget.project.showNdaBadge
+        ? _ndaBadge()
+        : _actionButtons(isSmall: isSmall);
     final Widget right = _techRow();
 
     final bool hasRight = widget.project.techStack.isNotEmpty;
